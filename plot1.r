@@ -1,5 +1,5 @@
 #open required libraries
-
+library("dplyr")
 #Read dataset
 tempfile<-"data.zip"
 if(!file.exists(tempfile)){
@@ -9,16 +9,18 @@ if(!file.exists(tempfile)){
 if(!file.exists("household_power_consumption.txt")){
   unzip(tempfile)
 }
+  Date1<-as.Date(c("2007-02-01"))
+  Date2<-as.Date(c("2007/02/02"))
   dt1<-read.table("household_power_consumption.txt", header=TRUE, sep=";")
-  a<-hist(as.numeric(dt1$Global_active_power)/1000
-          , breaks = 12
+  dt1<-mutate(dt1, Date= as.Date(dt1$Date,"%d/%m/%Y"))  
+  dt1<-dt1[dt1$Date>=Date1 & dt1$Date<=Date2,]
+  dt1$Global_active_power<-as.numeric(dt1$Global_active_power)/1000
+  png("plot1.png", width=480, height=480)
+  hist(dt1$Global_active_power
           , col="red"
           , main = "Global Active Power"
           , xlab = "Global Active Power (kilowatts)"
           , ylab = "Frequency"
-          , xlim = c(0,6) #range(as.numeric(dt1$Global_active_power)/1000)
-          , xaxt = "n"
           )
-  axis(1, at=seq(0,6,by=2), labels=seq(0,6,by=2))
-  print(a)
+  dev.off()
   
