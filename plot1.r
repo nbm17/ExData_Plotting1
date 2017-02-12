@@ -14,7 +14,7 @@ if(!file.exists("household_power_consumption.txt")){
   dt1<-read.table("household_power_consumption.txt", header=TRUE, sep=";")
   dt1<-mutate(dt1, Date= as.Date(dt1$Date,"%d/%m/%Y"))  
   dt1<-dt1[dt1$Date>=Date1 & dt1$Date<=Date2,]
-  dt1$Global_active_power<-as.numeric(dt1$Global_active_power)/1000
+  dt1$Global_active_power<-as.numeric(as.character(dt1$Global_active_power))
   png("plot1.png", width=480, height=480)
   hist(dt1$Global_active_power
           , col="red"
